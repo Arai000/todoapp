@@ -16,7 +16,7 @@
   <body class="h-100 bg-white">
     <main class="h-100">
       <div class="page-wrapper d-flex flex-row h-100 w-100">
-        <nav class="sidebar bg-light bg-gradient border-right">
+        <nav class="sidebar bg-light bg-gradient border-right h-100">
           <div class="brand p-4">
             <h4>
                 Work Out
@@ -24,16 +24,16 @@
           </div>
           <ul class="nav flex-column m-o p-3">
             <li class="nav-item mb-2 border-bottom">
-                <a href="" class="nav-link">Calender</a>
+                <a href="" class="nav-link">カレンダー</a>
             </li>
             <li class="nav-item mb-2 border-bottom">
-                <a href="" class="nav-link w-100 h-100">Tasks</a>
+                <a href="" class="nav-link w-100 h-100">タスク管理</a>
             </li>
             <li class="nav-item mb-2 border-bottom">
-              <a href="" class="nav-link w-100 h-100">Work Space</a>
+              <a href="" class="nav-link w-100 h-100">ワークスペース</a>
             </li>
             <li class="nav-item mb-2 border-bottom">
-              <a href="" class="nav-link w-100 h-100">Memo</a>
+              <a href="" class="nav-link w-100 h-100">分析</a>
             </li>
           </ul>
         </nav>
@@ -58,63 +58,328 @@
           </nav>
             <div class="content p-3">
               <div class="page-title pb-2 ">
-                <h2>Your tasks</h2>
+                <h2>タスク一覧</h2>
               </div>
-              <button type="button" class="btn btn-warning">add task</button>
+              <button type="button" id="reflect-task" class="btn btn-warning" data-toggle="modal" data-target="#create-modal">新規作成</button>
               <div class="w-100 my-3">
-                <ol id="tasks" class="list-group w-100">
-                  <li class="list-group-item justify-content-between">
-                    <div class="row">
-                      <div class="col-10 align-self-center">
-                        タスク１
-                      </div>
-                      <div class="col-2 align-self-center">
-                        <button class="btn btn-light btn-sm">
-                          <i class="bi bi-pen"></i>
-                        </button>
-                        <button class="btn btn-light btn-sm">
-                          <i class="bi bi-trash"></i>
-                        </button>
-                      </div>
-                    </div>
-                  </li>
-                  <li class="list-group-item justify-content-between">
-                    <div class="row">
-                      <div class="col-10 align-self-center">
-                        タスク２
-                      </div>
-                      <div class="col-2 align-self-center">
-                        <button class="btn btn-light btn-sm">
-                          <i class="bi bi-pen"></i>
-                        </button>
-                        <button class="btn btn-light btn-sm">
-                          <i class="bi bi-trash"></i>
-                        </button>
-                      </div>
-                    </div>
-                  </li>
-                </ol>
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th scope="col" class="col4">タスク名</th>
+                      <th scope="col" class="col2">カテゴリ</th>
+                      <th scope="col" class="col2">締切日</th>
+                      <th scope="col" class="col2">更新日</th>
+                      <th scope="col" class="col2">進捗</th>
+                      <th scope="col" class="col">更新</th>
+                      <th scope="col" class="col">削除</th>
+                    </tr>
+                  </thead>
+                  <tbody id="tasks">
+                  </tbody>
+                </table>
               </div>
             </div>
           </div>
         </div>
     </main>
+    <div
+      class="modal fade"
+      id="create-modal"
+      tabindex="-1"
+      role="dialog"
+      aria-labelledby="create-modal"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="create-modal">新規登録</h5>
+            <button
+              type="button"
+              class="close"
+              data-dismiss="modal"
+              aria-label="Close"
+            >
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <form>
+              <div class="form-group">
+                <label for="task">タスク</label>
+                <input type="text" class="form-control" id="task" name="task" />
+              </div>
+              <div class="form-group">
+                <label for="deadline">期限</label>
+                <input type="date" class="form-control" id="deadline" name="deadline" />
+              </div>
+              <div class="form-group">
+                <label for="category">カテゴリ</label>
+                <select class="form-control" id="category" name="category">
+                  <option value="1">生活</option>
+                  <option value="2">勉強</option>
+                  <option value="3">仕事</option>
+                  <option value="4">趣味</option>
+                </select>
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-dismiss="modal"
+            >
+              キャンセル
+            </button>
+            <button
+              type="button"
+              id="create-task"
+              data-dismiss="modal"
+              class="btn btn-primary"
+            >
+              登録
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      class="modal fade"
+      id="update-modal"
+      tabindex="-1"
+      role="dialog"
+      aria-labelledby="update-modal"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="update-modal">更新</h5>
+            <button
+              type="button"
+              class="close"
+              data-dismiss="modal"
+              aria-label="Close"
+            >
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <form>
+              <div class="form-group">
+                <label for="update-taskname">タスク</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="update-taskname"
+                  name="update-taskname"
+                />
+              </div>
+              <div class="form-group">
+                <label for="update-deadline">期限</label>
+                <input
+                  type="date"
+                  class="form-control"
+                  id="update-deadline"
+                  name="update-deadline"
+                />
+              </div>
+              <div class="form-group">
+                <label for="category">カテゴリ</label>
+                <select class="form-control" id="update-category" name="update-category">
+                  <option value="1">生活</option>
+                  <option value="2">勉強</option>
+                  <option value="3">仕事</option>
+                  <option value="4">趣味</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="category">ステータス</label>
+                <select class="form-control" id="update-status" name="update-status">
+                  <option value="0">未着手</option>
+                  <option value="1">着手中</option>
+                  <option value="2">完了</option>
+                </select>
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-dismiss="modal"
+            >
+              キャンセル
+            </button>
+            <button
+              type="button"
+              data-dismiss="modal"
+              class="btn btn-primary"
+              id="update-task"
+            >
+              保存
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- モーダル 更新 END -->
     <!-- Optional JavaScript -->
-    <script src="../javascripts/index.js"></script>
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.1/umd/popper.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.0.0-alpha1/js/bootstrap.min.js"></script>
+    <script
+      src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+      integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+      integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+      integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+      crossorigin="anonymous"
+    ></script>
+
+    <script src="../javascripts/index.js"></script>
+
+    <script>
+      var user_id=2;
+      function generate_table(response) {
+        var tbl = document.getElementById("tasks");
+        for (var i = 0; i < response.length; i++) {
+          var row = document.createElement("tr");
+          for (var j = 0; j < 7; j++) {
+            var cell = document.createElement("td");
+            switch (j){
+              case 0:
+                var cellText1 = document.createElement("p");
+                cellText1.className = "task_name_"+i;
+                cellText1.setAttribute("id",response[i].task_id);
+                cellText1.textContent = response[i].task_name;
+                cell.appendChild(cellText1);
+                break;
+              case 1:
+                var cellText2 = document.createElement("p");
+                cellText2.className = "category_name_"+i;
+                cellText2.setAttribute("id",response[i].category_id);
+                cellText2.textContent = response[i].category_name;
+                cell.appendChild(cellText2);
+                break;
+              case 2:
+                var cellText3 = document.createElement("p");
+                cellText3.className = "deadline_"+i;
+                cellText3.textContent = response[i].deadline.slice(0,10);
+                cell.appendChild(cellText3);
+                break;
+              case 3:
+                var cellText4 = document.createElement("p");
+                cellText4.className = "updated_at_"+i;
+                if (response[i].updated_at!==null){
+                  cellText4.textContent = response[i].updated_at.slice(0,10);
+                }
+                cell.appendChild(cellText4);
+                break;
+              case 4:
+                var cellText5 = document.createElement("p");
+                cellText5.className = "status_"+i;
+                cellText5.setAttribute("id",response[i].status_id);
+                cellText5.textContent = response[i].status_name;
+                cell.appendChild(cellText5);
+                break;
+              case 5:
+                var Button1 = document.createElement('button');
+                Button1.className = "btn btn-light btn-sm update";
+                Button1.type = 'button';
+                Button1.setAttribute("value",i);
+                Button1.setAttribute("data-toggle","modal");
+                Button1.setAttribute("data-target","#update-modal");
+                var input = document.createElement('i');
+                input.className = "bi bi-pen";
+                Button1.appendChild(input);
+                cell.appendChild(Button1);
+                break;
+              case 6:
+                var Button2 = document.createElement('button');
+                Button2.type = 'button';
+                Button2.setAttribute("value",i);
+                Button2.className = "btn btn-light btn-sm delete";
+                var input = document.createElement('i');
+                input.className = "bi bi-trash";
+                Button2.appendChild(input);
+                cell.appendChild(Button2);
+                break;
+            }
+            row.appendChild(cell);
+          }
+          tbl.appendChild(row);
+        }
+      }
+      // 一覧取得
+      $(async function () {
+        const response = await httpGet(
+          "//" + window.location.host + "/api/tasks",
+          user_id
+        );
+        generate_table(response);
+      });
+
+      // 削除
+      $(document).on("click",".delete", async function () {
+        const taskName = $(".task_name_"+$(this).val()).text();
+        alert("下記の内容を削除します。\n "+taskName);
+        var task_id = $(".task_name_"+$(this).val()).attr('id');
+        const response2 = await httpDelete(
+          "//" + window.location.host + "/api/tasks",
+          user_id,
+          task_id
+        );
+        location.reload();
+      });
+
+      // 新規登録
+      $("#create-task").on("click", async function () {
+        const data = {
+          user_id: 2,
+          taskName: $("[name=task]").val(),
+          deadline: $("[name=deadline]").val(),
+          category: $("[name=category]").val(),
+        };
+        const response = await httpPost(
+          "//" + window.location.host + "/api/tasks",
+          data
+        );
+        console.log(response);
+        location.reload();
+      });
+
+      // 更新
+      $(document).on("click",".update", async function () {
+        var user_id = 2;
+        var task_id = $(".task_name_"+$(this).val()).attr('id');
+        $("#update-taskname").val($(".task_name_"+$(this).val()).text());
+        $("#update-deadline").val($(".deadline_"+$(this).val()).text());
+        $("#update-category").find("option").eq($(".category_name_"+$(this).val()).attr('id')-1).prop("selected", "selected");
+        $("#update-status").find("option").eq($(".status_"+$(this).val()).attr('id')).prop("selected", "selected");
+        $("#update-task").on("click", async function () {
+          const data = {
+            taskName: $("[name=update-taskname]").val(),
+            deadline: $("[name=update-deadline]").val(),
+            category: $("[name=update-category]").val(),
+            status: $("[name=update-status]").val(),
+          };
+          const response = await httpUpdate(
+            "//" + window.location.host + "/api/tasks",
+            data,
+            user_id,
+            task_id
+          );
+          console.log(response);
+          location.reload();
+        });
+      });
+    </script>
   </body>
 </html>
-
-<script>
-  $(async function () {
-    const data = await httpGet("//" + window.location.host + "/api/news");
-    const list = data.map((item) => {
-      return '<li class=list-group-item justify-content-between"><div class="row"><div class="col-10 align-self-center">${item.task}</div><div class="col-2 align-self-center"><button class="btn btn-light btn-sm"><i class="bi bi-pen"></i></button><button class="btn btn-light btn-sm"><i class="bi bi-trash"></i></button></div></div></li>';
-    });
-    $("ol#tasks").append(list);
-  });
-</script>
-

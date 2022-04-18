@@ -1,7 +1,7 @@
 // 取得用API実行メソッド
-const httpGet = async function (url) {
+const httpGet = async function (url,user_id) {
   try {
-    const response = await fetch(url, {
+    const response = await fetch(url+"/"+user_id, {
       method: "GET", // GET
     });
     return response.json(); // JSON のレスポンスを JavaScript のオブジェクトに変換
@@ -22,16 +22,17 @@ const httpPost = async function (url, data) {
       },
       body: JSON.stringify(data),
     });
-    return response.json(); // JSON のレスポンスを JavaScript のオブジェクトに変換
+    console.log(response.json());
+    return response; // JSON のレスポンスを JavaScript のオブジェクトに変換
   } catch (err) {
     console.log(err);
   }
 };
 
 // 更新用API実行メソッド
-const httpUpdate = async function (url, data) {
+const httpUpdate = async function (url,data,user_id,task_id) {
   try {
-    const response = await fetch(url, {
+    const response = await fetch(url+"/"+user_id+"/"+task_id, {
       method: "PATCH", // PATCH
       headers: {
         "Content-Type": "application/json",
@@ -45,9 +46,9 @@ const httpUpdate = async function (url, data) {
 };
 
 // 削除用API実行メソッド
-const httpDelete = async function (url) {
+const httpDelete = async function (url,user_id,task_id) {
   try {
-    const response = await fetch(url, {
+    const response = await fetch(url+"/"+user_id+"/"+task_id, {
       method: "DELETE", // DELETE
     });
     return response.json(); // JSON のレスポンスを JavaScript のオブジェクトに変換
@@ -55,18 +56,3 @@ const httpDelete = async function (url) {
     console.log(err);
   }
 };
-
-window.onload = () => {
-  let sidebarToggler = document.getElementById('sidebarToggler')
-  let page = document.getElementsByTagName('main')[0];
-  let showSidebar = true;
-  sidebarToggler.addEventListener('click', () => {
-      if(showSidebar){
-          page.style.cssText = 'margin-left: -250px'
-          showSidebar = false;
-      }else{
-          page.style.cssText = 'margin-left: 0px'
-          showSidebar = true;
-      }
-  })
-}

@@ -15,7 +15,8 @@
     "http-errors": "~1.6.3",
     "jade": "~1.11.0",
     "morgan": "~1.9.1",
-    "mysql2": "^2.3.3"
+    "mysql2": "^2.3.3",
+    "node-fetch": "^3.2.3"
   },
   "devDependencies": {
     "eslint": "^8.11.0",

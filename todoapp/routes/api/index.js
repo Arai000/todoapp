@@ -23,14 +23,21 @@ router.delete("/tasks/:user_id/:task_id", async function (req, res, next) {
 });
 
 /* タスクを1件取するルーティング */
-router.get("/tasks/:id", async function (req, res, next) {
-  const getTasksId = await tasks.getTasksId(req.params.id);
+router.get("/tasks/:user_id/:task_id", async function (req, res, next) {
+  const getTasksId = await tasks.getTasksId(req.params.user_id,req.params.task_id);
   res.send(getTasksId);
+});
+
+/* 並び替えられたタスクを取得するルーティング */
+router.get("/tasks/:user_id/:sort/:asc", async function (req, res, next) {
+  const getSortedTasks = await tasks.getSortedTasks(req.params.user_id,req.params.sort,req.params.asc);
+  res.send(getSortedTasks);
 });
 
 /* タスクを1件更新するルーティング */
 router.patch("/tasks/:user_id/:task_id", async function (req, res, next) {
   console.log(req.param);
+  console.log("index.js");
   const patchTasksId = await tasks.patchTasksId(req.params.user_id,req.params.task_id,req.body);
   res.send(patchTasksId);
 });

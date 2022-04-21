@@ -62,14 +62,24 @@
               </div>
               <button type="button" id="reflect-task" class="btn btn-warning" data-toggle="modal" data-target="#create-modal">新規作成</button>
               <div class="w-100 my-3">
-                <table class="table">
+                <table class="table table-hover">
                   <thead>
                     <tr>
-                      <th scope="col" class="col4">タスク名</th>
-                      <th scope="col" class="col2">カテゴリ</th>
-                      <th scope="col" class="col2">締切日</th>
-                      <th scope="col" class="col2">更新日</th>
-                      <th scope="col" class="col2">進捗</th>
+                      <th scope="col" id="0" data-asc="" class="col4 sort" sortable>タスク名
+                        <i class="fa fa-sort"></i>
+                      </th>
+                      <th scope="col" id="1" data-asc="" class="col2 sort" sortable>カテゴリ
+                        <i class="fa fa-sort"></i>
+                      </th>
+                      <th scope="col" id="2" data-asc="" class="col2 sort" sortable>締切日
+                        <i class="fa fa-sort"></i>
+                      </th>
+                      <th scope="col" id="3" data-asc="" class="col2 sort" sortable>更新日
+                        <i class="fa fa-sort"></i>
+                      </th>
+                      <th scope="col" id="4" data-asc="" class="col2 sort" sortable>進捗
+                        <i class="fa fa-sort"></i>
+                      </th>
                       <th scope="col" class="col">更新</th>
                       <th scope="col" class="col">削除</th>
                     </tr>
@@ -197,8 +207,8 @@
               <div class="form-group">
                 <label for="category">ステータス</label>
                 <select class="form-control" id="update-status" name="update-status">
-                  <option value="0">未着手</option>
-                  <option value="1">着手中</option>
+                  <option value="0">作業前</option>
+                  <option value="1">作業中</option>
                   <option value="2">完了</option>
                 </select>
               </div>
@@ -247,6 +257,48 @@
 
     <script>
       var user_id=2;
+      var Mode="view";
+      var Task_id;
+      var Task_name;
+      var Deadline;
+      var Category_id;
+      var Status_id;
+
+      function generate_option(name,num,response,i,type,parent){
+        var option = document.createElement("option");
+        option.value = num;
+        option.textContent = name;
+        switch(type){
+          case "category_id":
+            if(response[i].category_id==num+1){
+              option.setAttribute("selected","selected");
+            }
+            break;
+          case "status_id":
+            if(response[i].status_id==num){
+              option.setAttribute("selected","selected");
+            }
+            break;
+        }
+        parent.appendChild(option);
+      }
+      function generate_date(date_data){
+        const date = new Date(date_data);
+        const year = date.getFullYear();
+        const month = ("0"+(date.getMonth()+1)).slice(-2);
+        const day = ("0"+date.getDate()).slice(-2);
+        return year+"-"+month+"-"+day;
+      }
+      function generate_datetime(date_data){
+        const date = new Date(date_data);
+        const year = date.getFullYear();
+        const month = ("0"+(date.getMonth()+1)).slice(-2);
+        const day = ("0"+date.getDate()).slice(-2);
+        const hour = ("0"+date.getHours()).slice(-2);
+        const minute = ("0"+date.getMinutes()).slice(-2);
+        const second = ("0"+date.getSeconds()).slice(-2);
+        return year+"-"+month+"-"+day+" "+hour+":"+minute+":"+second+".000";
+      }
       function generate_table(response) {
         var tbl = document.getElementById("tasks");
         for (var i = 0; i < response.length; i++) {
@@ -255,61 +307,81 @@
             var cell = document.createElement("td");
             switch (j){
               case 0:
-                var cellText1 = document.createElement("p");
-                cellText1.className = "task_name_"+i;
-                cellText1.setAttribute("id",response[i].task_id);
-                cellText1.textContent = response[i].task_name;
-                cell.appendChild(cellText1);
+                var task_name = document.createElement("input");
+                task_name.className = "task_table task_name";
+                task_name.style.cssText = "border:none;";
+                task_name.setAttribute("data-type","task_name");
+                task_name.setAttribute("data-taskid",response[i].task_id);
+                task_name.setAttribute("value",response[i].task_name);
+                cell.appendChild(task_name);
                 break;
               case 1:
-                var cellText2 = document.createElement("p");
-                cellText2.className = "category_name_"+i;
-                cellText2.setAttribute("id",response[i].category_id);
-                cellText2.textContent = response[i].category_name;
-                cell.appendChild(cellText2);
+                var category = document.createElement("select");
+                  generate_option("生活",0,response,i,"category_id",category);
+                  generate_option("勉強",1,response,i,"category_id",category);
+                  generate_option("仕事",2,response,i,"category_id",category);
+                  generate_option("趣味",3,response,i,"category_id",category);
+                category.style.cssText = "border:none;";
+                category.className = "task_table form-control category_name";
+                category.setAttribute("data-type","category_name");
+                category.setAttribute("data-taskid",response[i].task_id);
+                category.setAttribute("id",response[i].category_id);
+                cell.appendChild(category);
                 break;
               case 2:
-                var cellText3 = document.createElement("p");
-                cellText3.className = "deadline_"+i;
-                cellText3.textContent = response[i].deadline.slice(0,10);
-                cell.appendChild(cellText3);
+                var deadline = document.createElement("input");
+                deadline.className = "task_table form-control deadline";
+                deadline.style.cssText = "border:none;";
+                deadline.setAttribute("type","date");
+                deadline.setAttribute("data-type","deadline");
+                deadline.setAttribute("data-taskid",response[i].task_id);
+                deadline.value = generate_date(response[i].deadline);
+                cell.appendChild(deadline);
                 break;
               case 3:
-                var cellText4 = document.createElement("p");
-                cellText4.className = "updated_at_"+i;
+                var update_at = document.createElement("p");
+                update_at.style.cssText = "border:none;";
+                update_at.className = "task_table updated_at";
+                update_at.setAttribute("data-type","updated_at");
+                update_at.setAttribute("data-taskid",response[i].task_id);
                 if (response[i].updated_at!==null){
-                  cellText4.textContent = response[i].updated_at.slice(0,10);
+                  update_at.textContent = generate_date(response[i].updated_at);
                 }
-                cell.appendChild(cellText4);
+                cell.appendChild(update_at);
                 break;
               case 4:
-                var cellText5 = document.createElement("p");
-                cellText5.className = "status_"+i;
-                cellText5.setAttribute("id",response[i].status_id);
-                cellText5.textContent = response[i].status_name;
-                cell.appendChild(cellText5);
+                var status = document.createElement("select");
+                  generate_option("作業前",0,response,i,"status_id",status);
+                  generate_option("作業中",1,response,i,"status_id",status);
+                  generate_option("完了",2,response,i,"status_id",status);
+                status.style.cssText = "border:none;";
+                status.className = "task_table form-control status_name";
+                status.setAttribute("data-type","status");
+                status.setAttribute("data-taskid",response[i].task_id);
+                status.setAttribute("id",response[i].status_id);
+                cell.appendChild(status);
                 break;
               case 5:
-                var Button1 = document.createElement('button');
-                Button1.className = "btn btn-light btn-sm update";
-                Button1.type = 'button';
-                Button1.setAttribute("value",i);
-                Button1.setAttribute("data-toggle","modal");
-                Button1.setAttribute("data-target","#update-modal");
+                var updatebtn = document.createElement('button');
+                updatebtn.className = "btn btn-light btn-sm update";
+                updatebtn.type = 'button';
+                updatebtn.setAttribute("value",i);
+                updatebtn.setAttribute("data-taskid",response[i].task_id);
                 var input = document.createElement('i');
                 input.className = "bi bi-pen";
-                Button1.appendChild(input);
-                cell.appendChild(Button1);
+                updatebtn.appendChild(input);
+                cell.appendChild(updatebtn);
                 break;
               case 6:
-                var Button2 = document.createElement('button');
-                Button2.type = 'button';
-                Button2.setAttribute("value",i);
-                Button2.className = "btn btn-light btn-sm delete";
+                var deletebtn = document.createElement('button');
+                deletebtn.type = 'button';
+                deletebtn.setAttribute("value",i);
+                deletebtn.setAttribute("data-taskid",response[i].task_id);
+                deletebtn.className = "btn btn-light btn-sm delete";
                 var input = document.createElement('i');
                 input.className = "bi bi-trash";
-                Button2.appendChild(input);
-                cell.appendChild(Button2);
+                deletebtn.appendChild(input);
+                cell.appendChild(deletebtn);
                 break;
             }
             row.appendChild(cell);
@@ -320,17 +392,63 @@
       // 一覧取得
       $(async function () {
         const response = await httpGet(
-          "//" + window.location.host + "/api/tasks",
-          user_id
+          "//" + window.location.host + "/api/tasks"+"/"+user_id
         );
         generate_table(response);
       });
+      async function update_data(task_name,deadline,category,status,task_id){
+        const data = {
+          taskName: task_name,
+          deadLine: deadline,
+          category: category,
+          status: status,
+        };
+        const response = await httpUpdate(
+          "//" + window.location.host + "/api/tasks",
+          data,
+          user_id,
+          task_id
+        );
+        console.log(response);
+        location.reload();
+      }
 
+      //更新2
+      $(document).on("change",".task_table", async function () {
+        Task_id = Number($(this).data('taskid'));
+        var task_data = await httpGet(
+          "//" + window.location.host + "/api/tasks"+"/"+user_id+"/"+Task_id
+        );
+        Mode = "update";
+        $(this).css('background-color','rgb(240, 220, 120)');
+        $(this).parents("tr").addClass("edited");
+        $(this).parents("tr").find(".update").addClass("push");
+        $(this).parents("tr").find(".update").css('background-color','rgb(120, 180, 120)');
+        Task_name=$(this).parents("tr").find(".task_name").val();
+        Category_id=Number($(this).parents("tr").find(".category_name").attr('id'));
+        Deadline = generate_datetime($(this).parents("tr").find(".deadline").val());
+        Status_id=Number($(this).parents("tr").find(".status_name").attr('id')-1);
+      });
+
+      $(document).on("click", function (event) {
+        if(!$(event.target).closest('.edited').length) {
+          if(Mode=="update"){
+            location.reload();
+            Mode = "view";
+          }
+        } else {
+          if($(event.target).closest('.push').length) {
+            if(Mode=="update"){
+              update_data(Task_name,Deadline,Category_id,Status_id,Task_id);
+              Mode = "view";
+            }
+          }
+        }
+      });
+     
       // 削除
       $(document).on("click",".delete", async function () {
-        const taskName = $(".task_name_"+$(this).val()).text();
-        alert("下記の内容を削除します。\n "+taskName);
-        var task_id = $(".task_name_"+$(this).val()).attr('id');
+        var task_id = $(this).data("taskid");
         const response2 = await httpDelete(
           "//" + window.location.host + "/api/tasks",
           user_id,
@@ -355,30 +473,29 @@
         location.reload();
       });
 
-      // 更新
-      $(document).on("click",".update", async function () {
-        var user_id = 2;
-        var task_id = $(".task_name_"+$(this).val()).attr('id');
-        $("#update-taskname").val($(".task_name_"+$(this).val()).text());
-        $("#update-deadline").val($(".deadline_"+$(this).val()).text());
-        $("#update-category").find("option").eq($(".category_name_"+$(this).val()).attr('id')-1).prop("selected", "selected");
-        $("#update-status").find("option").eq($(".status_"+$(this).val()).attr('id')).prop("selected", "selected");
-        $("#update-task").on("click", async function () {
-          const data = {
-            taskName: $("[name=update-taskname]").val(),
-            deadline: $("[name=update-deadline]").val(),
-            category: $("[name=update-category]").val(),
-            status: $("[name=update-status]").val(),
-          };
-          const response = await httpUpdate(
-            "//" + window.location.host + "/api/tasks",
-            data,
-            user_id,
-            task_id
-          );
-          console.log(response);
-          location.reload();
-        });
+      // ソート
+      $(".sort").on("click", async function () {
+        var sort = Number($(this).attr('id'));
+        var asc = $(this).data('asc');
+        $('th').data('asc', "");
+        if(asc == "" || asc == 0){
+          asc = 1;
+          $(this).data('asc', 1);
+        }else{
+          asc = 0;
+          $(this).data('asc', 0);
+        }
+        const response = await httpGet(
+          "//" + window.location.host + "/api/tasks"+"/"+user_id+"/"+sort+"/"+asc
+        );
+        var tbl = document.getElementById("tasks");
+        
+        tbllen=tbl.childNodes.length;
+        for (var i=0;i<tbllen;i++){
+          var row = tbl.childNodes[0];
+          tbl.removeChild(row);
+        }
+        generate_table(response);
       });
     </script>
   </body>

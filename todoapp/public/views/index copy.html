@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+
+    <!-- Bootstrap CSS -->
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+      integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+      crossorigin="anonymous"
+    />
+    <link rel="stylesheet" href="../stylesheets/style.css" />
+
+    <title>To Do app</title>
+  </head>
+  
+  <body>
+    <div class="container">
+      <button
+        type="button"
+        class="btn btn-primary"
+        data-toggle="modal"
+        data-target="#create-modal"
+        id="reflect task"
+      >
+        新規登録
+      </button>
+      
+      <ul id="task-list"></ul>
+
+    <!--  <div class="modal" tabindex="-1" role="dialog" id="modal-test" aria-labelledby="modal-test" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal header">
+              <h5 class="modal-title">新規登録</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <p>タスクを入力してください</p> 
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">キャンセル</button>
+              <button type="button" class="btn btn-primary">登録</button>
+            </div>  
+          </div>
+        </div>
+      </div>
+
+      <ul id="task-list"></ul>
+
+      <li class="list-group-item category-pink">
+        <div class="row">
+          <div class="col-6">
+            <span>犬の散歩</span>
+            <span>2022年4月14日</span>
+            <span><button id="update-button" data-id=${item.id} >更新</button></span>
+            <span><button id="delete-button" data-id=${item.id} data-delete=${item.task_name}>削除</button></span>
+          </div>
+        </div>  
+      </li>`
+      <li class="list-group-item category-pink">
+        <div class="row">
+          <div class="col-6">
+            <span>犬のご飯を買う</span>
+            <span>2022年4月20日</span>
+            <span><button id="update-button" data-id=${item.id} >更新</button></span>
+            <span><button id="delete-button" data-id=${item.id} data-delete=${item.task_name}>削除</button></span>
+          </div>
+        </div>
+      </li>`
+      <li class="list-group-item category-pink">
+        <div class="row">
+          <div class="col-6">
+            <span>犬を洗う</span>
+            <span>2022年4月14日</span>
+            <span><button id="update-button" data-id=${item.id} >更新</button></span>
+            <span><button id="delete-button" data-id=${item.id} data-delete=${item.task_name}>削除</button></span>
+          </div>
+        </div>  
+      </li>` -->
+
+      <!--<ul class="list-group">
+        <li class="list-group-item category-pink">
+          <div class="row">
+            <div class="col-6">
+              <div>犬の散歩</div>
+            </div>
+            <div class="col-3">
+              <div>2022年4月14日</div>
+            </div>
+            <div class="col-3">
+              <button
+              type="button"
+              class="btn btn-primary"
+              data-toggle="modal"
+              data-target="#update-modal"
+              >
+              更新
+              </button>
+
+              <button
+              type="button"
+              class="btn btn-danger delete"
+              data-delete="犬の散歩"
+              >
+              削除
+              </button>  
+            </div>
+          </div>
+        </li>
+        <li class="list-group-item category-pink">
+          <div class="row">
+            <div class="col-6">
+              <div>犬のご飯を買う</div>
+            </div>
+            <div class="col-3">
+              <div>2022年4月20日</div>
+            </div>
+            <div class="col-3">
+              <button
+              type="button"
+              class="btn btn-primary"
+              data-toggle="modal"
+              data-target="#update-modal"
+              >
+              更新
+              </button>
+
+              <button
+              type="button"
+              class="btn btn-danger delete"
+              data-delete="犬の散歩"
+              >
+              削除
+              </button>  
+            </div>
+          </div>
+        </li>
+        <li class="list-group-item category-pink">
+          <div class="row">
+            <div class="col-6">
+              <div>犬を洗う</div>
+            </div>
+            <div class="col-3">
+              <div>2022年4月30日</div>
+            </div>
+            <div class="col-3">
+              <button
+              type="button"
+              class="btn btn-primary"
+              data-toggle="modal"
+              data-target="#update-modal"
+              >
+              更新
+              </button>    
+
+              <button
+              type="button"
+              class="btn btn-danger delete"
+              data-delete="犬を洗う"
+              >
+              削除
+              </button>  
+            </div>
+          </div>
+        </li>
+      </ul>-->
+    </div>
+
+
+
+    <!--モーダル新規登録-->
+    <div
+      class="modal fade"
+      id="create-modal"
+      tabindex="-1"
+      role="dialog"
+      aria-labelledby="create-modal"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="create-modal">新規登録</h5>
+            <button
+              type="button"
+              class="close"
+              data-dismiss="modal"
+              aria-label="Close"
+            >
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <form>
+              <div class="form-group">
+                <label for="task">タスク</label>
+                <input type="text" class="form-control" id="task" name="task" />  
+              </div>
+              <div class="form-group">
+                <label for="deadline">期限</label>
+                <input 
+                  type="date" 
+                  class="form-control" 
+                  id="deadline" 
+                  name="deadline" 
+                />  
+              </div>
+              <div class="form-group">
+                <label for="category">カテゴリ</label>
+                <select class="form-control" id="category" name="category">
+                  <option value="1">生活</option>
+                  <option value="2">仕事</option>
+                  <option value="3">勉強</option>
+                  <option value="4">遊び、趣味</option>
+                </select>
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-dismiss="modal"
+            >
+              キャンセル
+            </button>
+            <button
+              type="button"
+              id="create-task"
+              data-dismiss="modal"
+              class="btn btn-primary"
+            >
+              登録
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!--モーダル新規登録end-->
+
+    <!-- モーダル 更新 -->
+    <div
+      class="modal fade"
+      id="update-modal"
+      tabindex="-1"
+      role="dialog"
+      aria-labelledby="update-modal"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="update-modal">更新</h5>
+            <button
+              type="button"
+              class="close"
+              data-dismiss="modal"
+              aria-label="Close"
+            >
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <form>
+              <div class="form-group">
+                <label for="update-task">タスク</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="update-task"
+                  name="update-task"
+                />
+              </div>
+              <div class="form-group">
+                <label for="update-deadline">期限</label>
+                <input
+                  type="date"
+                  class="form-control"
+                  id="update-deadline"
+                  name="update-deadline"
+                />
+              </div>
+              <div class="form-group">
+                <label for="category">カテゴリ</label>
+                <select class="form-control" name="update-category">
+                  <option value="1">生活</option>
+                  <option value="2">仕事</option>
+                  <option value="3">勉強</option>
+                  <option value="4">遊び、趣味</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="category">ステータス</label>
+                <select class="form-control" name="update-category">
+                  <option value="1">完了</option>
+                  <option value="2">作業中</option>
+                  <option value="3">未実施</option>
+                </select>
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-dismiss="modal"
+            >
+              キャンセル
+            </button>
+            <button
+              type="button"
+              data-dismiss="modal"
+              class="btn btn-primary"
+              id="update-task"
+            >
+              保存
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- モーダル 更新 END -->
+
+     <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script
+      src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+      integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+      integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+      integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+      crossorigin="anonymous"
+    ></script>
+
+    <script src="../javascripts/index.js"></script>
+
+    <script>
+      //新規登録
+      $("#create-task").on("click", async function () {
+        const data = {
+          taskName: $("[name=task]").val(),
+          deadline: $("[name=deadline]").val(),
+          category: $("[name=category]").val(),
+        };
+        const response = await httpPost(
+          "//" + window.location.host + "/api/tasks",
+          data
+        );
+        window.location.reload();
+        //console.log(response);
+      });
+
+      //タスク一覧取得
+      $(async function () {
+        //一覧取得APIを実行
+        const response = await httpGet(
+          "//" + window.location.host + "/api/tasks"
+        );
+
+        const list = response.map((item) => {
+        //リストを表示
+          return `
+            <li class="list-group-item category-pink">
+              <div class="row">
+                <div class="col-6">
+                  <span>${item.task_name}</span>
+                </div>
+                <div class="col-3">
+                  <span>${item.deadline}</span>
+                </div>
+                  <span>${item.category_name}</span>
+                  <span>${item.task_status}</span>
+                <div class="col-3">  
+                  <span>
+                    <button 
+                      class="btn btn-primary"
+                      id="update-button" 
+                      data-id=${item.id}
+                      data-toggle="modal"
+                      data-target="#update-modal"
+                    >
+                      更新
+                    </button>
+                  </span> 
+                  <span>
+                    <button 
+                      id="delete-button" 
+                      data-id=${item.id} 
+                      data-delete=${item.task_name}>
+                      削除
+                    </button>
+                  </span>
+                </div>
+              </div>           
+            </li>`;  
+        });
+
+        //ulタグにリストを追加
+        $("ul#task-list").append(list);
+      });  
+
+      //削除
+      /*$(".delete").on("click", function () {
+        const taskName = $(this).data("delete");
+        alert(`下記の内容を削除します。\n ${taskName}`);
+      });*/
+
+      //更新ボタン押下時
+      $(document).on("click", "#update-button", async function () {
+        $("#update-form").show();
+        const id = $(this).data("id");
+        const response = await httpGet(
+          "//" + window.location.host + `/api/tasks/${id}`
+        );
+       
+      //日付をxxxx-xx-xxに変換
+      const date = new Date(response[0].deadline);
+      const year = date.getFullYear();
+      const month = ("0" + (date.getMonth() + 1)).slice(-2);
+      const day = ("0" + date.getDate()).slice(-2);
+      const deadlineVal = `${year}-${month}-${day}`;  
+
+      //初期値をセット
+      $("#update-form input[name=id]").val(response[0].id);
+      $("#update-form input[name=task]").val(response[0].task_name);
+      $("#update-form input[name=deadline]").val(deadlineVal);
+      $("#update-form select[name=category]").val(response[0].category_id);
+      $("#update-form select[name=status]").val(response[0].task_status);
+      });
+
+      //保存ボタン押下時
+
+      //リクエストデータをフォームから取得
+
+      //新規登録APIを実行
+
+      //画面をリロード
+
+    </script>
+  </body>
+</html>  

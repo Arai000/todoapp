@@ -1,7 +1,7 @@
 // 取得用API実行メソッド
-const httpGet = async function (url,user_id) {
+const httpGet = async function (url) {
   try {
-    const response = await fetch(url+"/"+user_id, {
+    const response = await fetch(url, {
       method: "GET", // GET
     });
     return response.json(); // JSON のレスポンスを JavaScript のオブジェクトに変換
@@ -32,6 +32,7 @@ const httpPost = async function (url, data) {
 // 更新用API実行メソッド
 const httpUpdate = async function (url,data,user_id,task_id) {
   try {
+    console.log("index.js");
     const response = await fetch(url+"/"+user_id+"/"+task_id, {
       method: "PATCH", // PATCH
       headers: {

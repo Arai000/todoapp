@@ -65,19 +65,21 @@
                 <table class="table table-hover">
                   <thead>
                     <tr>
-                      <th scope="col" id="0" data-asc="" class="col4 sort" sortable>タスク名
+                      <th scope="col" id="0" data-asc="" class="col">
+                      </th>
+                      <th scope="col" id="1" data-asc="" class="col4 sort" sortable>タスク名
                         <i class="fa fa-sort"></i>
                       </th>
-                      <th scope="col" id="1" data-asc="" class="col2 sort" sortable>カテゴリ
+                      <th scope="col" id="2" data-asc="" class="col2 sort" sortable>カテゴリ
                         <i class="fa fa-sort"></i>
                       </th>
-                      <th scope="col" id="2" data-asc="" class="col2 sort" sortable>締切日
+                      <th scope="col" id="3" data-asc="" class="col2 sort" sortable>締切日
                         <i class="fa fa-sort"></i>
                       </th>
-                      <th scope="col" id="3" data-asc="" class="col2 sort" sortable>更新日
+                      <th scope="col" id="4" data-asc="" class="col2 sort" sortable>更新日
                         <i class="fa fa-sort"></i>
                       </th>
-                      <th scope="col" id="4" data-asc="" class="col2 sort" sortable>進捗
+                      <th scope="col" id="5" data-asc="" class="col sort" sortable>進捗
                         <i class="fa fa-sort"></i>
                       </th>
                       <th scope="col" class="col">更新</th>
@@ -270,7 +272,7 @@
         option.textContent = name;
         switch(type){
           case "category_id":
-            if(response[i].category_id==num+1){
+            if(response[i].category_id==num){
               option.setAttribute("selected","selected");
             }
             break;
@@ -302,43 +304,69 @@
       function generate_table(response) {
         var tbl = document.getElementById("tasks");
         for (var i = 0; i < response.length; i++) {
-          var row = document.createElement("tr");
-          for (var j = 0; j < 7; j++) {
-            var cell = document.createElement("td");
+          var rows = document.createElement("tr");
+          for (var j = 0; j < 8; j++) {
+            var row = document.createElement("td");
+            //row.style.cssText = "padding:0px";
             switch (j){
               case 0:
+                var color = document.createElement("div");
+                color.style.cssText = "width:20px";
+                color.style.cssText = "height:20px";
+                switch (response[i].category_id){
+                  case 1:
+                    color.style.cssText = "background-color:rgb(255, 200, 200)";
+                    break;
+                  case 2:
+                    color.style.cssText = "background-color:rgb(200, 200, 255)";
+                    break;
+                  case 3:
+                    color.style.cssText = "background-color:rgb(200, 255, 200)";
+                    break;
+                  case 4:
+                    color.style.cssText = "background-color:rgb(255, 255, 200)";
+                    break;
+                }
+                var index = document.createElement("p");
+                index.textContent = i;
+                color.appendChild(index);
+                index.style.cssText = "width:20px";
+                index.style.cssText = "height:20px";
+                row.appendChild(color);
+                break;
+              case 1:
                 var task_name = document.createElement("input");
                 task_name.className = "task_table task_name";
                 task_name.style.cssText = "border:none;";
                 task_name.setAttribute("data-type","task_name");
                 task_name.setAttribute("data-taskid",response[i].task_id);
                 task_name.setAttribute("value",response[i].task_name);
-                cell.appendChild(task_name);
+                row.appendChild(task_name);
                 break;
-              case 1:
+              case 2:
                 var category = document.createElement("select");
-                  generate_option("生活",0,response,i,"category_id",category);
-                  generate_option("勉強",1,response,i,"category_id",category);
-                  generate_option("仕事",2,response,i,"category_id",category);
-                  generate_option("趣味",3,response,i,"category_id",category);
+                  generate_option("生活",1,response,i,"category_id",category);
+                  generate_option("勉強",2,response,i,"category_id",category);
+                  generate_option("仕事",3,response,i,"category_id",category);
+                  generate_option("趣味",4,response,i,"category_id",category);
                 category.style.cssText = "border:none;";
-                category.className = "task_table form-control category_name";
                 category.setAttribute("data-type","category_name");
                 category.setAttribute("data-taskid",response[i].task_id);
                 category.setAttribute("id",response[i].category_id);
-                cell.appendChild(category);
+                category.className = "category_name";
+                row.appendChild(category);
                 break;
-              case 2:
+              case 3:
                 var deadline = document.createElement("input");
-                deadline.className = "task_table form-control deadline";
+                deadline.className = "deadline";
                 deadline.style.cssText = "border:none;";
                 deadline.setAttribute("type","date");
                 deadline.setAttribute("data-type","deadline");
                 deadline.setAttribute("data-taskid",response[i].task_id);
                 deadline.value = generate_date(response[i].deadline);
-                cell.appendChild(deadline);
+                row.appendChild(deadline);
                 break;
-              case 3:
+              case 4:
                 var update_at = document.createElement("p");
                 update_at.style.cssText = "border:none;";
                 update_at.className = "task_table updated_at";
@@ -347,21 +375,21 @@
                 if (response[i].updated_at!==null){
                   update_at.textContent = generate_date(response[i].updated_at);
                 }
-                cell.appendChild(update_at);
+                row.appendChild(update_at);
                 break;
-              case 4:
+              case 5:
                 var status = document.createElement("select");
                   generate_option("作業前",0,response,i,"status_id",status);
                   generate_option("作業中",1,response,i,"status_id",status);
                   generate_option("完了",2,response,i,"status_id",status);
                 status.style.cssText = "border:none;";
-                status.className = "task_table form-control status_name";
+                status.className = "status_name";
                 status.setAttribute("data-type","status");
                 status.setAttribute("data-taskid",response[i].task_id);
                 status.setAttribute("id",response[i].status_id);
-                cell.appendChild(status);
+                row.appendChild(status);
                 break;
-              case 5:
+              case 6:
                 var updatebtn = document.createElement('button');
                 updatebtn.className = "btn btn-light btn-sm update";
                 updatebtn.type = 'button';
@@ -370,9 +398,9 @@
                 var input = document.createElement('i');
                 input.className = "bi bi-pen";
                 updatebtn.appendChild(input);
-                cell.appendChild(updatebtn);
+                row.appendChild(updatebtn);
                 break;
-              case 6:
+              case 7:
                 var deletebtn = document.createElement('button');
                 deletebtn.type = 'button';
                 deletebtn.setAttribute("value",i);
@@ -381,12 +409,12 @@
                 var input = document.createElement('i');
                 input.className = "bi bi-trash";
                 deletebtn.appendChild(input);
-                cell.appendChild(deletebtn);
+                row.appendChild(deletebtn);
                 break;
             }
-            row.appendChild(cell);
+            rows.appendChild(row);
           }
-          tbl.appendChild(row);
+          tbl.appendChild(rows);
         }
       }
       // 一覧取得
@@ -425,9 +453,9 @@
         $(this).parents("tr").find(".update").addClass("push");
         $(this).parents("tr").find(".update").css('background-color','rgb(120, 180, 120)');
         Task_name=$(this).parents("tr").find(".task_name").val();
-        Category_id=Number($(this).parents("tr").find(".category_name").attr('id'));
-        Deadline = generate_datetime($(this).parents("tr").find(".deadline").val());
-        Status_id=Number($(this).parents("tr").find(".status_name").attr('id')-1);
+        Category_id=Number($(this).parents("tr").find(".category_name").val());
+        Deadline =generate_datetime($(this).parents("tr").find(".deadline").val());
+        Status_id=Number($(this).parents("tr").find(".status_name").val());
       });
 
       $(document).on("click", function (event) {

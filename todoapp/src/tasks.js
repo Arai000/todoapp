@@ -68,10 +68,8 @@ getSortedTasks = async function (user_id,sort,asc) {
     switch (sort){
       case "0":
         if (asc==0){
-          console.log("here2");
           sql = "SELECT * FROM todoapp.t_task inner join todoapp.m_category ON t_task.category_id = m_category.category_id inner join todoapp.m_user ON t_task.user_id = m_user.user_id inner join todoapp.m_status ON t_task.status_id = m_status.status_id WHERE m_user.user_id = ? ORDER BY t_task.task_name DESC;";
         }else{
-          console.log("here3");
           sql = "SELECT * FROM todoapp.t_task inner join todoapp.m_category ON t_task.category_id = m_category.category_id inner join todoapp.m_user ON t_task.user_id = m_user.user_id inner join todoapp.m_status ON t_task.status_id = m_status.status_id WHERE m_user.user_id = ? ORDER BY t_task.task_name ASC;";
         }
         break;

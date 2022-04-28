@@ -60,26 +60,26 @@
               <div class="page-title pb-2 ">
                 <h2>タスク一覧</h2>
               </div>
-              <button type="button" id="reflect-task" class="btn btn-warning" data-toggle="modal" data-target="#create-modal">新規作成</button>
+              <button type="button" id="reflect-task" class="btn btn-secondary" data-toggle="modal" data-target="#create-modal">新規作成</button>
               <div class="w-100 my-3">
                 <table class="table table-hover">
                   <thead>
                     <tr>
-                      <th scope="col" id="0" data-asc="" class="col">
+                      <th scope="col" class="col">
                       </th>
-                      <th scope="col" id="1" data-asc="" class="col4 sort" sortable>タスク名
+                      <th scope="col" id="0" data-asc="" class="col4 sort" sortable>タスク名
                         <i class="fa fa-sort"></i>
                       </th>
-                      <th scope="col" id="2" data-asc="" class="col2 sort" sortable>カテゴリ
+                      <th scope="col" id="1" data-asc="" class="col2 sort" sortable>カテゴリ
                         <i class="fa fa-sort"></i>
                       </th>
-                      <th scope="col" id="3" data-asc="" class="col2 sort" sortable>締切日
+                      <th scope="col" id="2" data-asc="" class="col2 sort" sortable>締切日
                         <i class="fa fa-sort"></i>
                       </th>
-                      <th scope="col" id="4" data-asc="" class="col2 sort" sortable>更新日
+                      <th scope="col" id="3" data-asc="" class="col2 sort" sortable>更新日
                         <i class="fa fa-sort"></i>
                       </th>
-                      <th scope="col" id="5" data-asc="" class="col sort" sortable>進捗
+                      <th scope="col" id="4" data-asc="" class="col sort" sortable>進捗
                         <i class="fa fa-sort"></i>
                       </th>
                       <th scope="col" class="col">更新</th>
@@ -258,7 +258,7 @@
     <script src="../javascripts/index.js"></script>
 
     <script>
-      var user_id=2;
+      var user_id=1;
       var Mode="view";
       var Task_id;
       var Task_name;
@@ -301,38 +301,29 @@
         const second = ("0"+date.getSeconds()).slice(-2);
         return year+"-"+month+"-"+day+" "+hour+":"+minute+":"+second+".000";
       }
-      function generate_table(response) {
+      function generate_table(response){
         var tbl = document.getElementById("tasks");
         for (var i = 0; i < response.length; i++) {
           var rows = document.createElement("tr");
           for (var j = 0; j < 8; j++) {
             var row = document.createElement("td");
-            //row.style.cssText = "padding:0px";
             switch (j){
               case 0:
-                var color = document.createElement("div");
-                color.style.cssText = "width:20px";
-                color.style.cssText = "height:20px";
+                row.style.cssText = "padding:0px";
                 switch (response[i].category_id){
                   case 1:
-                    color.style.cssText = "background-color:rgb(255, 200, 200)";
+                    row.style.cssText = "background-color:#dc3545";
                     break;
                   case 2:
-                    color.style.cssText = "background-color:rgb(200, 200, 255)";
+                    row.style.cssText = "background-color:#0d6efd";
                     break;
                   case 3:
-                    color.style.cssText = "background-color:rgb(200, 255, 200)";
+                    row.style.cssText = "background-color:#198754";
                     break;
                   case 4:
-                    color.style.cssText = "background-color:rgb(255, 255, 200)";
+                    row.style.cssText = "background-color:#ffc107";
                     break;
                 }
-                var index = document.createElement("p");
-                index.textContent = i;
-                color.appendChild(index);
-                index.style.cssText = "width:20px";
-                index.style.cssText = "height:20px";
-                row.appendChild(color);
                 break;
               case 1:
                 var task_name = document.createElement("input");
@@ -353,12 +344,12 @@
                 category.setAttribute("data-type","category_name");
                 category.setAttribute("data-taskid",response[i].task_id);
                 category.setAttribute("id",response[i].category_id);
-                category.className = "category_name";
+                category.className = "task_table category_name";
                 row.appendChild(category);
                 break;
               case 3:
                 var deadline = document.createElement("input");
-                deadline.className = "deadline";
+                deadline.className = "task_table deadline";
                 deadline.style.cssText = "border:none;";
                 deadline.setAttribute("type","date");
                 deadline.setAttribute("data-type","deadline");
@@ -383,7 +374,7 @@
                   generate_option("作業中",1,response,i,"status_id",status);
                   generate_option("完了",2,response,i,"status_id",status);
                 status.style.cssText = "border:none;";
-                status.className = "status_name";
+                status.className = "task_table status_name";
                 status.setAttribute("data-type","status");
                 status.setAttribute("data-taskid",response[i].task_id);
                 status.setAttribute("id",response[i].status_id);
@@ -424,6 +415,7 @@
         );
         generate_table(response);
       });
+      
       async function update_data(task_name,deadline,category,status,task_id){
         const data = {
           taskName: task_name,
@@ -448,6 +440,7 @@
           "//" + window.location.host + "/api/tasks"+"/"+user_id+"/"+Task_id
         );
         Mode = "update";
+        
         $(this).css('background-color','rgb(240, 220, 120)');
         $(this).parents("tr").addClass("edited");
         $(this).parents("tr").find(".update").addClass("push");
